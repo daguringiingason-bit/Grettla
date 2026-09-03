@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ættartré — Grettis saga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14171a;
+  --panel:#1b1f22;
+  --panel-2:#20252a;
+  --hairline:#2c3236;
+  --bone:#e9e4d8;
+  --bone-dim:#c8c2b4;
+  --mist:#93a099;
+  --moss:#8ba07c;
+  --moss-dim:#5f7256;
+  --ember:#c1622d;
+  --ember-bright:#e0824c;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--bone);
+  font-family:'Lora', serif;
+  line-height:1.7;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{color:inherit;}
+
+.topbar{
+  position:sticky; top:0; z-index:30;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:16px 32px;
+  background:rgba(20,23,26,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--hairline);
+}
+.topbar .brand{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:17px;
+  text-decoration:none;
+  color:var(--bone);
+  white-space:nowrap;
+}
+.topbar nav{
+  display:flex;
+  gap:22px;
+  flex-wrap:wrap;
+}
+.topbar nav a{
+  text-decoration:none;
+  color:var(--mist);
+  font-size:14px;
+  font-family:'Fraunces', serif;
+  letter-spacing:.01em;
+  padding:4px 2px;
+  border-bottom:1px solid transparent;
+}
+.topbar nav a:hover, .topbar nav a.current{
+  color:var(--ember-bright);
+  border-bottom-color:var(--ember-bright);
+}
+@media (max-width:700px){
+  .topbar{padding:14px 18px;}
+  .topbar nav{gap:14px;}
+  .topbar nav a{font-size:13px;}
+}
+
+
+.page-head{
+  max-width:900px;
+  margin:0 auto;
+  padding:56px 24px 20px;
+}
+.page-head .eftirn{
+  font-family:'Fraunces', serif;
+  font-style:italic;
+  color:var(--moss);
+  font-size:13px;
+  margin:0 0 8px;
+}
+.page-head h1{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:38px;
+  margin:0 0 12px;
+}
+.page-head p{
+  color:var(--mist);
+  font-size:15px;
+  max-width:640px;
+}
+.tree-wrap{
+  max-width:1000px;
+  margin:0 auto;
+  padding:10px 24px 120px;
+  overflow-x:auto;
+}
+.tree{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:640px;
+}
+.gen-label{
+  font-family:'Fraunces', serif;
+  font-style:italic;
+  font-size:12px;
+  color:var(--mist);
+  margin:34px 0 10px;
+  align-self:flex-start;
+}
+.gen-label:first-child{margin-top:0;}
+.row{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  position:relative;
+  flex-wrap:wrap;
+}
+.connector{
+  width:1px;
+  height:24px;
+  background:var(--hairline);
+  margin:0 auto;
+}
+.person{
+  background:var(--panel);
+  border:1px solid var(--hairline);
+  border-radius:6px;
+  padding:14px 16px;
+  width:220px;
+  text-align:center;
+}
+.person.main{
+  border-color:var(--ember);
+  box-shadow:0 0 0 1px var(--ember) inset;
+}
+.person h3{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:15px;
+  margin:0 0 6px;
+  color:var(--bone);
+}
+.person .role{
+  font-size:11px;
+  color:var(--moss);
+  font-family:'Fraunces', serif;
+  font-style:italic;
+  display:block;
+  margin-bottom:6px;
+}
+.person p{
+  font-size:12.5px;
+  color:var(--bone-dim);
+  margin:0;
+  line-height:1.5;
+}
+.union{
+  font-family:'Fraunces', serif;
+  font-style:italic;
+  color:var(--mist);
+  font-size:12px;
+  align-self:center;
+  padding-top:14px;
+}
+.branch{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.siblings-row{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+  position:relative;
+}
+.siblings-row::before{
+  content:"";
+  position:absolute;
+  top:-24px;
+  left:10%;
+  right:10%;
+  height:1px;
+  background:var(--hairline);
+}
+
+@media (max-width:700px){
+  .row{flex-direction:column; align-items:center;}
+  .siblings-row{flex-direction:column; align-items:center;}
+  .siblings-row::before{display:none;}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">Grettis saga</a>
+  <nav>
+    <a href="index.html">Forsíða</a>
+    <a href="grettis-saga.html">Lesa söguna</a>
+    <a href="personur.html">Persónur</a>
+    <a href="timalina.html">Tímalína</a>
+    <a href="aettartre.html" class="current">Ættartré</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="prof.html">Próf</a>
+  </nav>
+</header>
+<div class="page-head">
+  <p class="eftirn">Frá Önundi tréfóti til Grettis</p>
+  <h1>Ættartré</h1>
+  <p>Fjórar kynslóðir frá Önundi tréfóti til Grettis og systkina hans, með helstu atburðum hverrar kynslóðar.</p>
+</div>
+<div class="tree-wrap">
+
+<div class="tree">
+
+  <div class="gen-label">1. kynslóð</div>
+  <div class="person main">
+    <h3>Önundur tréfótur</h3>
+    <span class="role">langafi Grettis</span>
+    <p>Missti fótinn í orrustunni í Hafursfirði; nam land á Ströndum og bjó að Kaldbak.</p>
+  </div>
+  <div class="connector"></div>
+
+  <div class="row">
+    <div class="branch">
+      <div class="person">
+        <h3>Æsa Ófeigsdóttir</h3>
+        <span class="role">1. kona Önundar</span>
+        <p>Dóttir Ófeigs grettis; synir þeirra Þorgeir og Ófeigur grettir yngri.</p>
+      </div>
+    </div>
+    <div class="branch">
+      <div class="person">
+        <h3>Þórdís Þorgrímsdóttir</h3>
+        <span class="role">2. kona Önundar</span>
+        <p>Dóttir Þorgríms úr Gnúpi; móðir Þorgríms hærukolls.</p>
+      </div>
+      <div class="connector"></div>
+      <div class="gen-label">2. kynslóð</div>
+      <div class="person main">
+        <h3>Þorgrímur hærukollur</h3>
+        <span class="role">afi Grettis</span>
+        <p>Grásprengdur ungur en sterkur; keypti land að Bjargi í Miðfirði.</p>
+      </div>
+      <div class="union">⚭ Þórdís Ásmundardóttir</div>
+      <div class="connector"></div>
+
+      <div class="gen-label">3. kynslóð</div>
+      <div class="person main">
+        <h3>Ásmundur hærulangur</h3>
+        <span class="role">faðir Grettis</span>
+        <p>Kaupmaður og víðförull; tók við búi að Bjargi eftir föður sinn.</p>
+      </div>
+      <div class="connector"></div>
+
+      <div class="row">
+        <div class="branch">
+          <div class="union">⚭ Rannveig (í Noregi)</div>
+          <div class="connector"></div>
+          <div class="gen-label">4. kynslóð</div>
+          <div class="person">
+            <h3>Þorsteinn drómundur</h3>
+            <span class="role">hálfbróðir Grettis</span>
+            <p>Ólst upp í Noregi. Hefndi Grettis með því að vega Þorbjörn öngul í Miklagarði.</p>
+          </div>
+          <div class="union">⚭ Spes húsfreyja</div>
+        </div>
+        <div class="branch">
+          <div class="union">⚭ Ásdís á Bjargi</div>
+          <div class="connector"></div>
+          <div class="gen-label">4. kynslóð</div>
+          <div class="siblings-row">
+            <div class="person">
+              <h3>Atli</h3>
+              <span class="role">elstur</span>
+              <p>Vinsæll bóndi að Bjargi. Veginn af Þorbirni öxnamegin.</p>
+            </div>
+            <div class="person main">
+              <h3>Grettir</h3>
+              <span class="role">söguhetjan</span>
+              <p>Sterkasti maður Íslands. Fellur í Drangey eftir 19 ára útlegð.</p>
+            </div>
+            <div class="person">
+              <h3>Þórdís</h3>
+              <p>Giftist Glúmi Óspakssyni; sonur þeirra Óspakur.</p>
+            </div>
+            <div class="person">
+              <h3>Rannveig</h3>
+              <p>Giftist Gamla Þórhallssyni Vínlending.</p>
+            </div>
+            <div class="person">
+              <h3>Illugi</h3>
+              <span class="role">yngstur</span>
+              <p>Fylgir Gretti í útlegðina og fellur með honum í Drangey.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
